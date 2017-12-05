@@ -14,5 +14,10 @@ A2 = A[:, 2]
 A3 = A[:, 3]
 @einsum det_einsum := eijk[i,j,k] * A1[i] * A2[j] * A3[k]
 
-println(det_julia)
-println(det_einsum)    
+inv_julia = inv(A)
+inv_einsum = zeros(3, 3)
+@einsum inv_einsum[i, p] = eijk[i, j, k] * eijk[p, q, r] * A[q, j] * A[r, k]
+inv_einsum ./= (2.0 * det_einsum)
+
+display(inv_julia); println()
+display(inv_einsum); println()
